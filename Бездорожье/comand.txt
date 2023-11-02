@@ -1,0 +1,13 @@
+Generate_Field 1000 0.1
+Add_Stone 1 2 3 
+Add_Stone 4 5 6 
+unvalible_command2
+Add_Log 75 76 97 98 2 
+Add_Hill 25 25 4 5 0 5 0
+unvalible_command1
+Add_Stone 7 8 9 
+Add_Hill 50 50 5 5 5 0
+what's_wrong?
+Add_Log 30 31 40 41 1 
+somthing
+Add_Hill 25 25 4 5 5 0
