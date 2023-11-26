@@ -1,6 +1,6 @@
 Error: used unvalible command
 
-Error: value of parametrs is not correct
+Error: used unvalible command
 
 Error: used unvalible command
 

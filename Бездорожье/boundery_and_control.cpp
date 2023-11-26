@@ -135,13 +135,3 @@ class boundery{
            v.clear();
       }
 };
-
-    int main(){
-      control c;
-      boundery b(&c);
-      b.correct();
-      b.DoWork();
-      cout<<"ok"<<endl;
-      return 0;   
-   }
-

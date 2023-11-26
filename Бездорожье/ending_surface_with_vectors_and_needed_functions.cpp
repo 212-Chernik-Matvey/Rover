@@ -12,7 +12,17 @@ double gaussian2D(double x, double y, double x0, double y0, double sigma_x,
                       (y - y0) * (y - y0) / (2 * sigma_y * sigma_y));
   return A * exp(exponent);
 }
-
+class Porder{//point order
+  private:
+    int i;
+    int j;
+  public:
+    Porder() : i(0), j(0) {}
+    Porder(int i, int j) : i(i), j(j) {}
+    int geti() { return i; }
+    int getj() { return j; }
+    ~Porder(){}
+};
 
 class point {
 private:
@@ -25,17 +35,11 @@ public:
   point(double x, double y, double z) : x(x), y(y), z(z) {}
   point(const point &other) : x(other.x), y(other.y), z(other.z) {}
   point operator+(const point &other) {
-    x += other.x;
-    y += other.y;
-    z += other.z;
-    return *this;
+    return point(x + other.x, y + other.y, z + other.z);
   }
 
   point operator-(const point &other) {
-    x -= other.x;
-    y -= other.y;
-    z -= other.z;
-    return *this;
+    return point(x - other.x, y - other.y, z - other.z);
   }
 
   point operator/(double d) { return point(x / d, y / d, z / d); }
@@ -46,6 +50,23 @@ public:
     z = other.z;
     return *this;
   }
+  point operator+=(const point &other) {
+    x += other.x;
+    y += other.y;
+    z += other.z;
+    return *this;
+  }
+  point operator-=(const point &other) {
+    x -= other.x;
+    y -= other.y;
+    z -= other.z;
+    return *this;
+  }
+
+  bool operator==(const point &other){
+    return  x==other.x && y==other.y && z==other.z;
+  }
+    
   void setz(double newZ) { z = newZ; }
   double getx() const { return x; }
   double gety() const { return y; }
@@ -170,7 +191,9 @@ public:
 };
 
 class field {
-private:
+friend class Rover;
+friend class sensor;
+protected:
   int N;
   double pixel;
   ofstream file;
@@ -181,6 +204,17 @@ private:
 
 public:
   field(){}
+
+  Porder order_of_point(point A){
+     point B = A/pixel;
+     int i = (int)B.getx();
+     int j = (int)B.gety();
+     return Porder(i,j);
+  } 
+
+  double GetPixel(){
+    return pixel;
+  }
 
   void Setfield1(int NewN, double NewPixel){
      N = NewN;
@@ -221,6 +255,7 @@ public:
                   h += bells[k].gauss(Field[i][j]);
                 }
                 file << Field[i][j].getx() << " " << Field[i][j].gety() << " " << h << endl;
+                Field[i][j]+=point(0,0,h);
               }
               file << endl;
             }
@@ -235,19 +270,3 @@ public:
           }
 };
 
-/*int main() {
-   vector<class::log> logs;
-   class::log bufferL(25,25,60,60,8);
-   logs.push_back(bufferL);
-   vector<stone> stones;
-   stone bufferS(75, 75, 7);
-   stones.push_back(bufferS);
-   vector<bell> bells;
-   double DISPERSION[4] = {5.0, 0, 5.0, 0};
-   bells.push_back(bell(point(50, 50, 20), DISPERSION));
-   field f(100, 1, bells, stones, logs);
-   f.generate();
-   f.create_surface();
-   cout << "ok" << endl;
-   return 0;
-}*/
